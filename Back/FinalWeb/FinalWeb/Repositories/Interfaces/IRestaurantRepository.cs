@@ -4,7 +4,9 @@ namespace FinalWeb.Repositories.Interfaces
 {
     public interface IRestaurantRepository
     {
-        Restaurant? GetRestaurantById (Guid id);
-        int CreateRestaurant (Restaurant );
+        Restaurant? GetRestaurantById (int restaurantId);
+        int CreateRestaurant (Restaurant newRestaurant );
+        Restaurant? GetByEmail(string email);
+        List<Restaurant> GetAllRestaurants();
     }
 }

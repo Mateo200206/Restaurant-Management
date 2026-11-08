@@ -7,7 +7,14 @@ namespace FinalWeb.Controllers
     [ApiController]
     public class RestaurantsController : ControllerBase
     {
-        
-        
+        //[HttpGet("{id}")]
+        //public IActionResult GetRestaurantById(int id)
+        //{
+        //    if (id == 0)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //}
     }
 }

@@ -1,5 +1,6 @@
-﻿using FinalWeb.Models.DTOs.Responses;
+﻿using FinalWeb.Entities;
 using FinalWeb.Models.DTOs.Requests;
+using FinalWeb.Models.DTOs.Responses;
 
 namespace FinalWeb.Services.Interfaces
 {
@@ -8,5 +9,6 @@ namespace FinalWeb.Services.Interfaces
         RestaurantDto? GetRestaurantById(int id);
         RestaurantDto? CreateRestaurant (CreateRestaurantDto dto);
         List<RestaurantDto> GetAllRestaurants();
+        Restaurant? ValidateRestaurant(AuthenticationRequestDto dto);
     }
 }

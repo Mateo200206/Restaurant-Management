@@ -3,6 +3,7 @@ using FinalWeb.Models.DTOs.Requests;
 using FinalWeb.Models.DTOs.Responses;
 using FinalWeb.Repositories.Interfaces;
 using FinalWeb.Services.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FinalWeb.Services.Implementations
 {
@@ -69,6 +70,15 @@ namespace FinalWeb.Services.Implementations
                 Description = restaurant.Description,
                 ImageUrl = restaurant.ImageUrl,
             };
+        }
+        public Restaurant? ValidateRestaurant(AuthenticationRequestDto dto)
+        {
+            Restaurant? restaurant = _restaurantRepository.GetByEmail(dto.Email);
+            if (restaurant is null || restaurant.Password != dto.Password)
+            {
+                return null;
+            }
+            return restaurant;
         }
     }
 }

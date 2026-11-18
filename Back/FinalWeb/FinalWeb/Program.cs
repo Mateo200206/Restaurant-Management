@@ -43,6 +43,8 @@ builder.Services.AddDbContext<RestaurantContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RestaurantConnection")));
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {

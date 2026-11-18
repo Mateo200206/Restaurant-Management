@@ -1,7 +1,6 @@
 ﻿using FinalWeb.Models.DTOs.Requests;
 using FinalWeb.Models.DTOs.Responses;
 using FinalWeb.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalWeb.Controllers

@@ -1,0 +1,94 @@
+﻿using FinalWeb.Models.DTOs.Requests;
+using FinalWeb.Models.DTOs.Responses;
+using FinalWeb.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FinalWeb.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class ProductsController : ControllerBase
+    {
+        private readonly IProductService _productService;
+
+        public ProductsController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
+        [HttpGet]
+        public IActionResult GetMyProducts()
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            return Ok(_productService.GetProductsByRestaurant(restaurantId));
+        }
+
+        [HttpPost]
+        public IActionResult CreateProduct(CreateProductDto dto)
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            ProductDto? created = _productService.CreateProduct(dto, restaurantId);
+            if (created is null)
+            {
+                return BadRequest("La categoría no existe o no pertenece a tu restaurante");
+            }
+            return Created("Created", created);
+        }
+
+        [HttpPut("{productId}")]
+        public IActionResult UpdateProduct(int productId, CreateProductDto dto)
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            bool updated = _productService.UpdateProduct(productId, dto, restaurantId);
+            if (!updated)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{productId}")]
+        public IActionResult DeleteProduct(int productId)
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            bool deleted = _productService.DeleteProduct(productId, restaurantId);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpPut("{productId}/discount")]
+        public IActionResult UpdateDiscount(int productId, UpdateDiscountDto dto)
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            bool updated = _productService.UpdateDiscount(productId, dto, restaurantId);
+            if (!updated)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpPut("{productId}/happy-hour")]
+        public IActionResult UpdateHappyHour(int productId, UpdateHappyHourDto dto)
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            bool updated = _productService.UpdateHappyHour(productId, dto, restaurantId);
+            if (!updated)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+    }
+}

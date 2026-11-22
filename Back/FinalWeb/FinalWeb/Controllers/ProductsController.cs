@@ -26,6 +26,35 @@ namespace FinalWeb.Controllers
             return Ok(_productService.GetProductsByRestaurant(restaurantId));
         }
 
+        // Menú completo de un restaurante
+        [HttpGet("/api/restaurants/{restaurantId}/products")]
+        [AllowAnonymous]
+        public IActionResult GetProductsByRestaurant(int restaurantId)
+        {
+            return Ok(_productService.GetProductsByRestaurant(restaurantId));
+        }
+
+        // Productos de una categoría
+        [HttpGet("/api/categories/{categoryId}/products")]
+        [AllowAnonymous]
+        public IActionResult GetProductsByCategory(int categoryId)
+        {
+            return Ok(_productService.GetProductsByCategory(categoryId));
+        }
+
+        // Detalle de un producto
+        [HttpGet("{productId}")]
+        [AllowAnonymous]
+        public IActionResult GetProductById(int productId)
+        {
+            ProductDto? product = _productService.GetProductById(productId);
+            if (product is null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto dto)
         {

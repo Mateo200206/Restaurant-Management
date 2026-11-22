@@ -28,6 +28,13 @@ namespace FinalWeb.Controllers
             return Ok(_categoryService.GetAllCategories(restaurantId));
         }
 
+        [HttpGet("/api/restaurants/{restaurantId}/categories")]
+        [AllowAnonymous]
+        public IActionResult GetCategoriesByRestaurant(int restaurantId)
+        {
+            return Ok(_categoryService.GetAllCategories(restaurantId));
+        }
+
         [HttpPost]
         public IActionResult CreateCategory(CreateCategoryDto dto)
         {

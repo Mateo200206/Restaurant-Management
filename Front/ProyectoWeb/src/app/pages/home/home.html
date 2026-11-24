@@ -1,0 +1,7 @@
+<h1>Restaurantes</h1>
+@for (restaurant of restaurantsService.restaurants(); track restaurant.id) {
+    <a [routerLink]="['/restaurant', restaurant.id]">
+    <h2>{{ restaurant.name }}</h2>
+    </a>
+    <p>{{restaurant.description}}</p>    
+}

@@ -1,0 +1,15 @@
+<h1>{{ restaurant()?.name }}</h1>
+<p>{{ restaurant()?.description }}</p>
+@for (category of categoriesService.categories(); track category.id) {
+    <h2>{{ category.name }}</h2>
+    @for (product of productsService.products(); track product.id) {
+        @if (product.categoryId === category.id) {
+            <h3>{{ product.name }}</h3>
+            @if (product.discountPercentage === 0) {
+                <p>${{ product.finalPrice }}</p>
+            }@else{
+                <p><s>${{ product.price }}</s> ${{product.finalPrice}}</p>
+            }
+        }
+    }
+}

@@ -3,13 +3,14 @@ using FinalWeb.Models.DTOs.Requests;
 using FinalWeb.Models.DTOs.Responses;
 using FinalWeb.Repositories.Interfaces;
 using FinalWeb.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 
 namespace FinalWeb.Services.Implementations
 {
     public class RestaurantService : IRestaurantService
     {
         private IRestaurantRepository _restaurantRepository;
+        private readonly PasswordHasher<Restaurant> _passwordHasher = new();
         public RestaurantService (IRestaurantRepository restaurantRepository)
         {
             _restaurantRepository = restaurantRepository;
@@ -25,11 +26,11 @@ namespace FinalWeb.Services.Implementations
             Restaurant newRestaurant = new Restaurant()
             {
                 Email = dto.Email,
-                Password = dto.Password,
                 Name = dto.Name,
                 Description = dto.Description,
                 ImageUrl = dto.ImageUrl,
             };
+            newRestaurant.Password = _passwordHasher.HashPassword(newRestaurant, dto.Password);
             int newId = _restaurantRepository.CreateRestaurant(newRestaurant);
 
             RestaurantDto restaurantDto = new() 
@@ -74,11 +75,43 @@ namespace FinalWeb.Services.Implementations
         public Restaurant? ValidateRestaurant(AuthenticationRequestDto dto)
         {
             Restaurant? restaurant = _restaurantRepository.GetByEmail(dto.Email);
-            if (restaurant is null || restaurant.Password != dto.Password)
+            if (restaurant is null || _passwordHasher.VerifyHashedPassword(restaurant, restaurant.Password, dto.Password) == PasswordVerificationResult.Failed)
             {
                 return null;
             }
             return restaurant;
+        }
+
+        public bool UpdateRestaurant(UpdateRestaurantDto dto, int restaurantId)
+        {
+            Restaurant? restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+            if (restaurant is null)
+            {
+                return false;
+            }
+
+            restaurant.Name = dto.Name;
+            restaurant.Description = dto.Description;
+            restaurant.ImageUrl = dto.ImageUrl;
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                restaurant.Password = _passwordHasher.HashPassword(restaurant, dto.Password);
+            }
+
+            _restaurantRepository.UpdateRestaurant(restaurant, restaurantId);
+            return true;
+        }
+
+        public bool DeleteRestaurant(int restaurantId)
+        {
+            Restaurant? restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
+            if (restaurant is null)
+            {
+                return false;
+            }
+
+            _restaurantRepository.DeleteRestaurant(restaurant);
+            return true;
         }
     }
 }

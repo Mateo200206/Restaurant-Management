@@ -29,5 +29,19 @@ namespace FinalWeb.Repositories.Implementations
         {
             return _context.Restaurants.ToList();
         }
+        public void UpdateRestaurant(Restaurant updatedRestaurant, int restaurantId)
+        {
+            Restaurant restaurantToUpdate = _context.Restaurants.First(r => r.Id == restaurantId);
+            restaurantToUpdate.Name = updatedRestaurant.Name;
+            restaurantToUpdate.Description = updatedRestaurant.Description;
+            restaurantToUpdate.ImageUrl = updatedRestaurant.ImageUrl;
+            restaurantToUpdate.Password = updatedRestaurant.Password;
+            _context.SaveChanges();
+        }
+        public void DeleteRestaurant(Restaurant restaurant)
+        {
+            _context.Restaurants.Remove(restaurant);
+            _context.SaveChanges();
+        }
     }
 } 

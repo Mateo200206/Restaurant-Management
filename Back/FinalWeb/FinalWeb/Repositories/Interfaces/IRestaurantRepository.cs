@@ -8,5 +8,7 @@ namespace FinalWeb.Repositories.Interfaces
         int CreateRestaurant (Restaurant newRestaurant );
         Restaurant? GetByEmail(string email);
         List<Restaurant> GetAllRestaurants();
+        void UpdateRestaurant(Restaurant updatedRestaurant, int restaurantId);
+        void DeleteRestaurant(Restaurant restaurant);
     }
 }

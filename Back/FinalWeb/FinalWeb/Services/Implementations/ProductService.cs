@@ -3,6 +3,7 @@ using FinalWeb.Models.DTOs.Requests;
 using FinalWeb.Models.DTOs.Responses;
 using FinalWeb.Repositories.Interfaces;
 using FinalWeb.Services.Interfaces;
+using System.Globalization;
 
 namespace FinalWeb.Services.Implementations
 {
@@ -174,6 +175,36 @@ namespace FinalWeb.Services.Implementations
             product.HasHappyHour = dto.HasHappyHour;
             _productRepository.UpdateProduct(product, productId);
             return true;
+        }
+        public string ExportMenu(int restaurantId)
+        {
+            List<Product> products = _productRepository.GetAllProductsByRestaurant(restaurantId);
+            if (products.Count == 0)
+            {
+                return "";
+            }
+
+            string header = "Categoria,Producto,Descripcion,Precio,Descuento,PrecioFinal,Destacado,HappyHour\n";
+
+            string menuData = products.Aggregate(header, (result, product) =>
+                result +
+                $"{Quote(product.Category.Name)}," +
+                $"{Quote(product.Name)}," +
+                $"{Quote(product.Description)}," +
+                $"{product.Price.ToString(CultureInfo.InvariantCulture)}," +
+                $"{product.DiscountPercentage}," +
+                $"{(product.Price - product.Price * product.DiscountPercentage / 100).ToString(CultureInfo.InvariantCulture)}," +
+                $"{(product.IsFeatured ? "Si" : "No")}," +
+                $"{(product.HasHappyHour ? "Si" : "No")}\n"
+            );
+
+            return menuData;
+        }
+
+        // Pone el texto entre comillas para que una coma dentro del texto no rompa las columnas
+        private static string Quote(string? text)
+        {
+            return "\"" + (text ?? "").Replace("\"", "\"\"") + "\"";
         }
     }
 }

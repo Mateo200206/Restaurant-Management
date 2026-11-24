@@ -10,5 +10,7 @@ namespace FinalWeb.Services.Interfaces
         RestaurantDto? CreateRestaurant (CreateRestaurantDto dto);
         List<RestaurantDto> GetAllRestaurants();
         Restaurant? ValidateRestaurant(AuthenticationRequestDto dto);
+        bool UpdateRestaurant(UpdateRestaurantDto dto, int restaurantId);
+        bool DeleteRestaurant(int restaurantId);
     }
 }

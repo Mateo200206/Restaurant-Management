@@ -3,6 +3,7 @@ using FinalWeb.Models.DTOs.Responses;
 using FinalWeb.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace FinalWeb.Controllers
 {
@@ -24,6 +25,21 @@ namespace FinalWeb.Controllers
             int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
 
             return Ok(_productService.GetProductsByRestaurant(restaurantId));
+        }
+
+        [HttpGet("export")]
+        public IActionResult ExportMenu()
+        {
+            int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
+
+            string csv = _productService.ExportMenu(restaurantId);
+            if (string.IsNullOrEmpty(csv))
+            {
+                return BadRequest("No tenés productos para exportar");
+            }
+
+            byte[] bytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv)).ToArray();
+            return File(bytes, "text/csv", "menu.csv");
         }
 
         // Menú completo de un restaurante

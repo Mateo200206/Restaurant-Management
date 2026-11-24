@@ -18,7 +18,7 @@ namespace FinalWeb.Repositories.Implementations
         }
         public List<Product> GetAllProductsByRestaurant(int restaurantId)
         {
-            return _context.Products.Where(p => p.Category.RestaurantId == restaurantId).ToList();
+            return _context.Products.Include(p => p.Category).Where(p => p.Category.RestaurantId == restaurantId).ToList();
         }
         public int CreateProduct(Product newProduct)
         {

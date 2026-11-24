@@ -13,5 +13,6 @@ namespace FinalWeb.Services.Interfaces
         bool DeleteProduct(int productId, int restaurantId);
         bool UpdateDiscount(int productId, UpdateDiscountDto dto, int restaurantId);
         bool UpdateHappyHour(int productId, UpdateHappyHourDto dto, int restaurantId);
+        string ExportMenu(int restaurantId);
     }
 }

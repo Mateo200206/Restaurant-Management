@@ -3,10 +3,11 @@ import { Restaurant } from '../../interfaces/restaurant';
 import { RestaurantsService } from '../../services/restaurants-service';
 import { ProductsService } from '../../services/products-service';
 import { CategoriesService } from '../../services/categories-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-menu',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './restaurant-menu.html',
   styleUrl: './restaurant-menu.scss',
 })

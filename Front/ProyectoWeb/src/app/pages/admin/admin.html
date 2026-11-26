@@ -1,6 +1,9 @@
 <h1>Mi panel</h1>
 <a routerLink="/admin/account">Mi cuenta</a>
 
+@if (loading()) {
+  <app-spinner />
+} @else {
 <section>
   <h2>Mis categorías</h2>
 
@@ -41,3 +44,4 @@
     </article>
   }
 </section>
+}

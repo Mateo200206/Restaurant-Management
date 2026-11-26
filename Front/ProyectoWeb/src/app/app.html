@@ -1,2 +1,26 @@
+<!-- Fondo de corcho. From Uiverse.io by chase2k25: https://uiverse.io/chase2k25/cold-duck-62 -->
+<div class="sandpaper-pattern">
+  <svg class="sandpaper-svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="sandTexture">
+        <feTurbulence
+          result="sand"
+          seed="20"
+          numOctaves="4"
+          baseFrequency="0.6"
+          type="fractalNoise"
+        ></feTurbulence>
+        <feColorMatrix
+          values="0.8 0 0 0 0.1  0 0.7 0 0 0.05  0 0 0.6 0 0.02  0 0 0 1 0"
+          type="matrix"
+        ></feColorMatrix>
+      </filter>
+    </defs>
+    <rect filter="url(#sandTexture)" height="100%" width="100%"></rect>
+  </svg>
+</div>
+
 <app-header />
-<router-outlet />
+<main>
+  <router-outlet />
+</main>

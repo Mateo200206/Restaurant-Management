@@ -1,7 +1,18 @@
 <h1>Restaurantes</h1>
-@for (restaurant of restaurantsService.restaurants(); track restaurant.id) {
-    <a [routerLink]="['/restaurant', restaurant.id]">
-    <h2>{{ restaurant.name }}</h2>
-    </a>
-    <p>{{restaurant.description}}</p>    
+
+@if (loading()) {
+  <app-spinner />
+} @else {
+  <!-- Tarjetas. From Uiverse.io by janisar-hyder -->
+  <div class="tarjetas">
+    @for (restaurant of restaurantsService.restaurants(); track restaurant.id) {
+      <a class="card" [routerLink]="['/restaurant', restaurant.id]">
+        <h2>{{ restaurant.name }}</h2>
+        @if (restaurant.imageUrl) {
+          <img class="image" [src]="restaurant.imageUrl" [alt]="restaurant.name">
+        }
+        <p>{{ restaurant.description }}</p>
+      </a>
+    }
+  </div>
 }

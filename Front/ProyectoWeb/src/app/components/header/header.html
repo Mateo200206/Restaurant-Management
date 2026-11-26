@@ -1,17 +1,40 @@
 <header>
+  <!-- Botones del nav. From Uiverse.io by Gaurav-WebDev -->
   <nav>
-    <a routerLink="/">Inicio</a>
+    <a class="button type1" routerLink="/">
+      <span class="btn-txt">Inicio</span>
+    </a>
 
     @if (authService.token()) {
-      <a routerLink="/admin">
-            Mi panel
+      <a class="button type1" routerLink="/admin">
+        <span class="btn-txt">Mi panel</span>
       </a>
-      <button (click)="logout()">Cerrar Sesión</button>
+      <button class="button type1" (click)="logout()">
+        <span class="btn-txt">Cerrar sesión</span>
+      </button>
     } @else {
-      <a routerLink="/login">Iniciar Sesión</a>
+      <a class="button type1" routerLink="/login">
+        <span class="btn-txt">Iniciar sesión</span>
+      </a>
     }
-    <button (click)="themeService.setTheme('light')">Claro</button>
-    <button (click)="themeService.setTheme('dark')">Oscuro</button>
-    <button (click)="themeService.setTheme('auto')">Auto</button>
   </nav>
+
+  <div class="temas">
+    <!-- Toggle de tema. From Uiverse.io by Madflows: https://uiverse.io/Madflows -->
+    <div class="toggle-switch">
+      <label class="switch-label">
+        <input
+          type="checkbox"
+          class="checkbox"
+          aria-label="Cambiar entre tema claro y oscuro"
+          [checked]="themeService.isLight()"
+          (change)="themeService.setTheme(themeService.isLight() ? 'dark' : 'light')">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <button class="button type1" [class.activo]="themeService.theme() === 'auto'" (click)="themeService.setTheme('auto')">
+      <span class="btn-txt">Auto</span>
+    </button>
+  </div>
 </header>

@@ -4,6 +4,7 @@ import { RestaurantsService } from '../../services/restaurants-service';
 import { Router } from '@angular/router';
 import { UpdateAccountRequest } from '../../interfaces/auth';
 import { required,form, FormField } from '@angular/forms/signals';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-account',
@@ -40,22 +41,40 @@ export class Account {
       }
     }
   }
-  
+ 
   async onSubmit(event: Event) {
-    event.preventDefault();
-    const ok = await this.authService.updateAccount(this.accountModel());
-    if (ok) {
-      alert("Datos actualizados");
-    } else {
-      alert("No se pudieron guardar los cambios");
-    }
+  event.preventDefault();
+  const ok = await this.authService.updateAccount(this.accountModel());
+  if (ok) {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Datos actualizados",
+      showConfirmButton: false,
+      timer: 2000
+    });
+  } else {
+    Swal.fire("Error", "No se pudieron guardar los cambios", "error");
   }
+}
 
-  async onDeleteAccount() {
-    if (!confirm("¿Seguro que querés borrar tu cuenta? Se borran también todas tus categorías y productos.")) return;
+async onDeleteAccount() {
+    const result = await Swal.fire({
+      title: "¿Borrar tu cuenta?",
+      text: "Se borran también todas tus categorías y productos. No se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Borrar cuenta",
+      cancelButtonText: "Cancelar"
+    });
+    if (!result.isConfirmed) return;
+
     const ok = await this.authService.deleteAccount();
     if (ok) {
       this.router.navigate(["/"]);
+    } else {
+      Swal.fire("Error", "No se pudo borrar la cuenta", "error");
     }
   }
 }

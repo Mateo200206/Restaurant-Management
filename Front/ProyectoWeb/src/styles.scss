@@ -1,21 +1,139 @@
-:root {
-  --bg: #ffffff;
-  --text: #1a1a1a;
+/* ===== Fuente (Google Fonts) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+
+/* ===== Reset (como el de Meyer que vimos en el Notion) ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* ===== Colores: tema claro ===== */
+:root {
+  --color-fondo: #fff8f1;
+  --color-tarjeta: #ffffff;
+  --color-texto: #2b1d14;
+  --color-texto-suave: #7a6455;
+  --color-principal: #c2410c;
+  --color-principal-fuerte: #9a3412;
+  --color-borde: #f0dccb;
+  --radio: 14px;
+}
+
+/* ===== Tema oscuro elegido a mano ===== */
 [data-theme="dark"] {
-  --bg: #121212;
-  --text: #eeeeee;
+  --color-fondo: #1c1410;
+  --color-tarjeta: #2a1f19;
+  --color-texto: #f5e9df;
+  --color-texto-suave: #c4ab98;
+  --color-principal: #fb923c;
+  --color-principal-fuerte: #fdba74;
+  --color-borde: #45342a;
+}
+
+/* ===== Tema oscuro automático (según la compu) ===== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-fondo: #1c1410;
+    --color-tarjeta: #2a1f19;
+    --color-texto: #f5e9df;
+    --color-texto-suave: #c4ab98;
+    --color-principal: #fb923c;
+    --color-principal-fuerte: #fdba74;
+    --color-borde: #45342a;
+  }
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.05rem;
+}
+
+img {
+  max-width: 100%;
+  border-radius: var(--radio);
+}
+
+a {
+  color: var(--color-principal);
+  text-decoration: none;
+  &:hover {
+    color: var(--color-principal-fuerte);
+  }
+}
+
+button {
+  font: inherit;
+  background-color: var(--color-principal);
+  color: white;
+  border: none;
+  border-radius: var(--radio);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--color-principal-fuerte);
+  }
+  &:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+}
+
+/* ===== Fondo de corcho =====
+   From Uiverse.io by chase2k25: https://uiverse.io/chase2k25/cold-duck-62
+   Le agregué position fixed y z-index para que quede atrás de todo. */
+.sandpaper-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #755139;
+  overflow: hidden;
+}
+
+.sandpaper-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.85;
+}
+
+/* En modo oscuro, el corcho más oscuro */
+[data-theme="dark"] .sandpaper-pattern {
+  filter: brightness(0.5);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #121212;
-    --text: #eeeeee;
+  :root:not([data-theme="light"]) .sandpaper-pattern {
+    filter: brightness(0.5);
   }
+}
+
+/* ===== El contenido, centrado ===== */
+main {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ===== La "hoja" blanca: en todas las páginas menos el Home,
+   que muestra las tarjetas directo sobre el corcho ===== */
+main > :not(router-outlet):not(app-home) {
+  display: block;
+  padding: 2rem;
+  background-color: var(--color-tarjeta);
+  border-radius: var(--radio);
+}
+
+input, textarea, select {
+  font: inherit;
+  background-color: var(--color-tarjeta);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 0.5rem 1rem;
 }

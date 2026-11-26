@@ -4,10 +4,12 @@ import { RouterLink } from '@angular/router';
 import { CategoriesService } from '../../services/categories-service';
 import { required, maxLength, form, FormField } from '@angular/forms/signals';
 import { Category } from '../../interfaces/category';
+import Swal from 'sweetalert2';
+import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
   selector: 'app-admin',
-  imports: [RouterLink, FormField],
+  imports: [RouterLink, FormField, Spinner],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
@@ -15,16 +17,32 @@ export class Admin implements OnInit {
   productsService = inject(ProductsService)
   categoriesService = inject(CategoriesService)
   editingCategoryId = signal<number | null>(null);
+  loading = signal(true);
 
-  ngOnInit(){
-    this.productsService.getMyProducts();
-    this.categoriesService.getMyCategories();
+  async ngOnInit(){
+    await this.productsService.getMyProducts();
+    await this.categoriesService.getMyCategories();
+    this.loading.set(false);
   }
 
   async onDeleteProduct(id: number) {
-    if (!confirm("¿Seguro que querés eliminar este producto?")) return;
+    const result = await Swal.fire({
+      title: "¿Eliminar producto?",
+      text: "No se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    });
+    if (!result.isConfirmed) return;
+
     const ok = await this.productsService.deleteProduct(id);
-    if (!ok) alert("No se pudo eliminar el producto");
+    if (!ok) Swal.fire("Error", "No se pudo eliminar el producto", "error");
+  }
+
+  async onToggleHappyHour(id: number, value: boolean) {
+    const ok = await this.productsService.setHappyHour(id, value);
+    if (!ok) Swal.fire("Error", "No se pudo cambiar el happy hour", "error");
   }
 
   categoryModel = signal({ name: "" });
@@ -49,14 +67,18 @@ export class Admin implements OnInit {
   }
 
   async onDeleteCategory(id: number) {
-    if (!confirm("¿Eliminar la categoría? También se borran todos sus productos.")) return;
-    const ok = await this.categoriesService.deleteCategory(id);
-    if (!ok) alert("No se pudo eliminar la categoría");
-  }
+    const result = await Swal.fire({
+      title: "¿Eliminar categoría?",
+      text: "También se borran todos sus productos. No se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    });
+    if (!result.isConfirmed) return;
 
-  async onToggleHappyHour(id: number, value: boolean) {
-    const response = await this.productsService.setHappyHour(id, value);
-    if (!response) alert("No se pudo cambiar el happy hour");
+    const ok = await this.categoriesService.deleteCategory(id);
+    if (!ok) Swal.fire("Error", "No se pudo eliminar la categoría", "error");
   }
 
   onEditCategory(category: Category) {
@@ -71,6 +93,6 @@ export class Admin implements OnInit {
 
   async onExportMenu() {
     const ok = await this.productsService.exportMenu();
-    if (!ok) alert("No se pudo exportar. ¿Tenés productos cargados?");
+    if (!ok) Swal.fire("Error", "No se pudo exportar. ¿Tenés productos cargados?", "error");
   }
 }

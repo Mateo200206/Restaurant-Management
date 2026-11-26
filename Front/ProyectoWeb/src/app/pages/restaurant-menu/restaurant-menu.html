@@ -1,36 +1,41 @@
-<nav>
-  <button (click)="selectedCategoryId.set(null)">Todas</button>
-  @for (category of categoriesService.categories(); track category.id) {
-    <button (click)="selectedCategoryId.set(category.id)">{{ category.name }}</button>
-  }
-</nav>
-<h1>{{ restaurant()?.name }}</h1>
-<p>{{ restaurant()?.description }}</p>
-@for (category of categoriesService.categories(); track category.id) {
-    @if (selectedCategoryId() === category.id || selectedCategoryId() == null) {
-        <section>
-            <h2>{{ category.name }}</h2>
-            @for (product of productsService.products(); track product.id) {          
-                @if (product.categoryId === category.id) {
-                    <article>
-                        <a [routerLink]="['/product', product.id]">
-                            <h3>{{ product.name }}</h3> 
-                        </a>
-                        @if (product.isFeatured) {
-                            <span>⭐ Destacado</span>
-                        }
-                        @if (product.hasHappyHour) {
-                            <span>🍻 Happy Hour</span>
-                        }
-                        @if (product.discountPercentage === 0) {
-                            <p>${{ product.finalPrice }}</p>
-                        }@else{
-                        <p>-{{product.discountPercentage}}%  <s>${{ product.price }}</s>  ${{product.finalPrice}}</p>
-                        }
-                    </article>
+@if (loading()) {
+    <app-spinner />
+} @else {
+    <h1>{{ restaurant()?.name }}</h1>
+    <p>{{ restaurant()?.description }}</p>
+
+    <nav>
+      <button (click)="selectedCategoryId.set(null)">Todas</button>
+      @for (category of categoriesService.categories(); track category.id) {
+        <button (click)="selectedCategoryId.set(category.id)">{{ category.name }}</button>
+      }
+    </nav>
+
+    @for (category of categoriesService.categories(); track category.id) {
+        @if (selectedCategoryId() === category.id || selectedCategoryId() === null) {
+            <section>
+                <h2>{{ category.name }}</h2>
+                @for (product of productsService.products(); track product.id) {
+                    @if (product.categoryId === category.id) {
+                        <article>
+                            <a [routerLink]="['/product', product.id]">
+                                <h3>{{ product.name }}</h3>
+                            </a>
+                            @if (product.isFeatured) {
+                                <span>⭐ Destacado</span>
+                            }
+                            @if (product.hasHappyHour) {
+                                <span>🍻 Happy Hour</span>
+                            }
+                            @if (product.discountPercentage === 0) {
+                                <p>${{ product.finalPrice }}</p>
+                            } @else {
+                                <p>-{{product.discountPercentage}}%  <s>${{ product.price }}</s>  ${{product.finalPrice}}</p>
+                            }
+                        </article>
+                    }
                 }
-                
-            }
-        </section>
+            </section>
+        }
     }
 }

@@ -23,6 +23,14 @@ export class ThemeService {
     }
   }
 
+  /** Devuelve true si lo que se ve en pantalla es el tema claro (también en modo auto) */
+  isLight() {
+    if (this.theme() === "auto") {
+      return !window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return this.theme() === "light";
+  }
+
   constructor() {
     this.applyTheme();
   }

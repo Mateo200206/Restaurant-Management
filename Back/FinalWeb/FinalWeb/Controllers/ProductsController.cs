@@ -63,6 +63,11 @@ namespace FinalWeb.Controllers
         [AllowAnonymous]
         public IActionResult GetProductById(int productId)
         {
+            if (productId <= 0)
+            {
+                return BadRequest("El ID ingresado debe ser mayor a 0");
+            }
+
             ProductDto? product = _productService.GetProductById(productId);
             if (product is null)
             {

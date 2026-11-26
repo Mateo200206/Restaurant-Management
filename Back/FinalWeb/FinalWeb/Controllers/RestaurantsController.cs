@@ -23,9 +23,14 @@ namespace FinalWeb.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<RestaurantDto> GetRestaurant(int id) 
+        public ActionResult<RestaurantDto> GetRestaurant(int id)
         {
-           RestaurantDto? found = _restaurantService.GetRestaurantById(id);
+            if (id <= 0)
+            {
+                return BadRequest("El ID ingresado debe ser mayor a 0");
+            }
+
+            RestaurantDto? found = _restaurantService.GetRestaurantById(id);
             if (found == null) 
             {
                 return NotFound();

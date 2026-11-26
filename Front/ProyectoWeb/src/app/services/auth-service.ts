@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { LoginRequest, RegisterRequest } from '../interfaces/auth';
+import { LoginRequest, RegisterRequest, UpdateAccountRequest } from '../interfaces/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +34,31 @@ export class AuthService {
       body: JSON.stringify(registerData)
       });
       return response.ok;
-    }     
+    }
+    
+    async deleteAccount(){
+      const response = await fetch(this.URL_BASE + "/restaurants", {
+        method: "DELETE",
+        headers: { "content-type": "application/json", Authorization: "Bearer " + this.token()},
+      });
+      if (!response.ok) return false;
+      this.logout();
+      return true;
+    }
+
+    async updateAccount(data: UpdateAccountRequest){
+      const response = await fetch(this.URL_BASE + "/restaurants",{
+      method: "PUT",
+      headers: { "content-type": "application/json", Authorization: "Bearer " + this.token()},
+      body: JSON.stringify(data)
+      });
+      return response.ok;
+    }
+
+    getRestaurantId(): number | null {
+      const token = this.token();
+      if (!token) return null;
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return Number(payload.sub);
+    }
 }

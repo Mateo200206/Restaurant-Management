@@ -13,9 +13,18 @@ export interface Product {
 
 export interface ProductRequest {
   name: string;
-  description?: string;
+  description: string;
   price: number;
-  imageUrl?: string;
+  imageUrl: string;
   isFeatured: boolean;
   categoryId: number;
+}
+
+export interface ProductFormModel {
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  isFeatured: boolean;
+  categoryId: string;
 }

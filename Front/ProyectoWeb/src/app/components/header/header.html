@@ -1,0 +1,17 @@
+<header>
+  <nav>
+    <a routerLink="/">Inicio</a>
+
+    @if (authService.token()) {
+      <a routerLink="/admin">
+            Mi panel
+      </a>
+      <button (click)="logout()">Cerrar Sesión</button>
+    } @else {
+      <a routerLink="/login">Iniciar Sesión</a>
+    }
+    <button (click)="themeService.setTheme('light')">Claro</button>
+    <button (click)="themeService.setTheme('dark')">Oscuro</button>
+    <button (click)="themeService.setTheme('auto')">Auto</button>
+  </nav>
+</header>

@@ -17,6 +17,7 @@ export class RestaurantMenu implements OnInit{
   restaurantsService = inject(RestaurantsService);
   productsService = inject(ProductsService);
   categoriesService = inject(CategoriesService);
+  selectedCategoryId = signal<number | null>(null);
 
   async ngOnInit(){
     this.restaurant.set(await this.restaurantsService.getRestaurantById(this.id()))

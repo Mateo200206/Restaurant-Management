@@ -1,0 +1,43 @@
+<h1>Mi panel</h1>
+<a routerLink="/admin/account">Mi cuenta</a>
+
+<section>
+  <h2>Mis categorías</h2>
+
+  <form (submit)="onSubmitCategory($event)">
+    <label for="categoryName">Nombre de la categoría</label>
+    <input id="categoryName" type="text" [formField]="categoryForm.name">
+
+    @if (editingCategoryId()) {
+      <button [disabled]="categoryForm().invalid()">Guardar</button>
+      <button type="button" (click)="onCancelEdit()">Cancelar</button>
+    } @else {
+      <button [disabled]="categoryForm().invalid()">Agregar</button>
+    }
+  </form>
+
+  @for (category of categoriesService.myCategories(); track category.id) {
+    <article>
+      <h3>{{ category.name }}</h3>
+      <button (click)="onEditCategory(category)">Editar</button>
+      <button (click)="onDeleteCategory(category.id)">Eliminar</button>
+    </article>
+  }
+</section>
+
+<section>
+  <h2>Mis productos</h2>
+  <a routerLink="/admin/products/new" aria-label="Nuevo producto">+</a> <button (click)="onExportMenu()">Exportar menú (CSV)</button>
+
+  @for (product of productsService.myProducts(); track product.id) {
+    <article>
+      <h3>{{ product.name }}</h3>
+      <p>${{ product.finalPrice }}</p>
+      <a [routerLink]="['/admin/products', product.id, 'edit']">Editar</a>
+      <button (click)="onToggleHappyHour(product.id, !product.hasHappyHour)">
+        @if (product.hasHappyHour) { Quitar happy hour } @else { Activar happy hour }
+      </button>
+      <button (click)="onDeleteProduct(product.id)">Eliminar</button>
+    </article>
+  }
+</section>

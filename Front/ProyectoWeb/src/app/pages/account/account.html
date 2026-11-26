@@ -1,0 +1,30 @@
+<h1>Mi cuenta</h1>
+
+<form (submit)="onSubmit($event)">
+  <div class="field">
+    <label for="name">Nombre del restaurante</label>
+    <input id="name" type="text" [formField]="accountForm.name">
+  </div>
+
+  <div class="field">
+    <label for="description">Descripción</label>
+    <textarea id="description" [formField]="accountForm.description"></textarea>
+  </div>
+
+  <div class="field">
+    <label for="imageUrl">URL de imagen</label>
+    <input id="imageUrl" type="url" [formField]="accountForm.imageUrl">
+  </div>
+
+  <div class="field">
+    <label for="password">Nueva contraseña (dejala vacía para no cambiarla)</label>
+    <input id="password" type="password" [formField]="accountForm.password">
+  </div>
+
+  <button [disabled]="accountForm().invalid()">Guardar cambios</button>
+</form>
+
+<section>
+  <h2>Zona peligrosa</h2>
+  <button type="button" (click)="onDeleteAccount()">Borrar mi cuenta</button>
+</section>

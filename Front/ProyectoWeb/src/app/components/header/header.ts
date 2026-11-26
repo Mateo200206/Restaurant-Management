@@ -15,6 +15,15 @@ export class Header {
   themeService = inject(ThemeService);
   router = inject(Router);
 
+    onToggleAuto(){
+      if (this.themeService.theme() === "auto") {
+        // Al desmarcar Auto, se queda en el tema que se está viendo
+        this.themeService.setTheme(this.themeService.isLight() ? "light" : "dark");
+      } else {
+        this.themeService.setTheme("auto");
+      }
+    }
+
     logout(){
       this.authService.logout();
       this.router.navigate(["/"]);

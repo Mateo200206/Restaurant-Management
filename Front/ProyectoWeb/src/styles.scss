@@ -17,6 +17,7 @@
   --color-principal: #c2410c;
   --color-principal-fuerte: #9a3412;
   --color-borde: #f0dccb;
+  --color-chincheta: #d9534f;
   --radio: 14px;
 }
 
@@ -29,6 +30,7 @@
   --color-principal: #fb923c;
   --color-principal-fuerte: #fdba74;
   --color-borde: #45342a;
+  --color-chincheta: #f28b82;
 }
 
 /* ===== Tema oscuro automático (según la compu) ===== */
@@ -41,6 +43,7 @@
     --color-principal: #fb923c;
     --color-principal-fuerte: #fdba74;
     --color-borde: #45342a;
+    --color-chincheta: #f28b82;
   }
 }
 
@@ -122,7 +125,7 @@ main {
 
 /* ===== La "hoja" blanca: en todas las páginas menos el Home,
    que muestra las tarjetas directo sobre el corcho ===== */
-main > :not(router-outlet):not(app-home) {
+main > :not(router-outlet):not(app-home):not(app-login):not(app-register) {
   display: block;
   padding: 2rem;
   background-color: var(--color-tarjeta);
@@ -133,7 +136,173 @@ input, textarea, select {
   font: inherit;
   background-color: var(--color-tarjeta);
   color: var(--color-texto);
-  border: 1px solid var(--color-borde);
+  border: 2px solid var(--color-texto-suave);
   border-radius: var(--radio);
   padding: 0.5rem 1rem;
 }
+
+/* ===== Formularios (sirve para login, registro, producto y cuenta) ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Cada campo: label arriba, input abajo */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    font-weight: 700;
+  }
+}
+
+/* Campo de checkbox: la casilla al lado del texto */
+.field-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  /* La casilla no usa el padding ni el borde de los inputs de texto */
+  input {
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: 0;
+    accent-color: var(--color-principal);
+  }
+}
+
+/* Al hacer clic en un input, se marca en naranja */
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--color-principal);
+}
+
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+/* Mensaje de error */
+.error {
+  color: var(--color-chincheta);
+  font-weight: 700;
+}
+
+/* ===== Formulario de login y registro =====
+   From Uiverse.io by Yaya12085
+   Cambios míos:
+   - colores fijos (royalblue, #fff, grey, green) por variables del tema
+   - el label sube cuando el input NO está vacío (:not(:placeholder-shown)),
+     en lugar de :valid, así funciona también en los campos opcionales
+   - el label "lleno" usa el naranja en lugar del verde, para no sumar otro color
+   - la animación del punto se apaga si la persona tiene las animaciones desactivadas
+   - lo centré y le puse el borde de las tarjetas del Home
+   - más espacio abajo del input, porque nuestra letra es más grande que la del original */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--color-tarjeta);
+  border: 4px solid var(--color-texto);
+  border-radius: var(--radio);
+}
+
+.title {
+  font-size: 28px;
+  color: var(--color-principal);
+  font-weight: 800;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+
+.title::before, .title::after {
+  position: absolute;
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: var(--color-principal);
+}
+
+.title::after {
+  animation: pulse 1s linear infinite;
+}
+
+.message, .signin {
+  color: var(--color-texto-suave);
+  font-size: 14px;
+}
+
+.signin {
+  text-align: center;
+}
+
+.form label {
+  position: relative;
+}
+
+.form label .input {
+  width: 100%;
+  padding: 8px 12px 24px 12px;
+  outline: 0;
+  border: 2px solid var(--color-texto-suave);
+  border-radius: 10px;
+}
+
+.form label .input:focus {
+  border-color: var(--color-principal);
+}
+
+.form label .input + span {
+  position: absolute;
+  left: 12px;
+  top: 15px;
+  color: var(--color-texto-suave);
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:focus + span,
+.form label .input:not(:placeholder-shown) + span {
+  top: 34px;
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--color-principal);
+}
+
+.submit {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Si la persona desactivó las animaciones en su compu, el punto no late */
+@media (prefers-reduced-motion: reduce) {
+  .title::after {
+    animation: none;
+  }
+}
+

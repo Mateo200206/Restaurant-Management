@@ -1,24 +1,45 @@
-<h1>Registrate</h1>
-<form (submit)="onRegister($event)">
+<!-- Formulario. From Uiverse.io by Yaya12085 -->
+<form class="form" (submit)="onRegister($event)">
+  <p class="title">Registrate</p>
+  <p class="message">Creá la cuenta de tu restaurante y armá tu carta digital.</p>
 
-  <label for="email">Email</label>
-  <input id="email" type="email" [formField]="registerForm.email">
+  <label>
+    <input class="input" type="text" placeholder=" " [formField]="registerForm.name">
+    <span>Nombre del restaurante</span>
+  </label>
 
-  <label for="password">Contraseña</label>
-  <input id="password" type="password" [formField]="registerForm.password">
+  <label>
+    <input class="input" type="email" placeholder=" " [formField]="registerForm.email">
+    <span>Email</span>
+  </label>
 
-  <label for="name">Nombre</label>
-  <input id="name" type="text" [formField]="registerForm.name">
+  <label>
+    <input class="input" type="password" placeholder=" " [formField]="registerForm.password">
+    <span>Contraseña</span>
+  </label>
 
-  <label for="description">Descripcion</label>
-  <textarea id="description" [formField]="registerForm.description"></textarea>
+  <label>
+    <input class="input" type="password" placeholder=" " [formField]="registerForm.password2">
+    <span>Repetir contraseña</span>
+  </label>
+  @if (registerForm.password2().invalid() && registerModel().password2 !== "") {
+    <p class="error">Las contraseñas no coinciden</p>
+  }
 
-  <label for="image">URL Imagen</label>
-  <input id="image" type="url" [formField]="registerForm.imageUrl">
+  <label>
+    <textarea class="input" placeholder=" " [formField]="registerForm.description"></textarea>
+    <span>Descripción (opcional)</span>
+  </label>
 
-    @if (registerError()) {
-        <p>Verifique haber completado correctamente todos los campos.</p>
-    }
-  <button [disabled]="registerForm().invalid()">Registrarse</button>
-  <a routerLink="/login">¿Ya tenés cuenta? Iniciá sesión</a>
+  <label>
+    <input class="input" type="url" placeholder=" " [formField]="registerForm.imageUrl">
+    <span>URL de imagen (opcional)</span>
+  </label>
+
+  @if (registerError()) {
+    <p class="error">Revisá haber completado bien todos los campos.</p>
+  }
+
+  <button class="submit" [disabled]="registerForm().invalid()">Registrarse</button>
+  <p class="signin">¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a></p>
 </form>

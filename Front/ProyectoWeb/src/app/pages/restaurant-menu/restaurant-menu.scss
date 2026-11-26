@@ -1,0 +1,149 @@
+/* ===== Encabezado: foto a la izquierda, nombre y descripción a la derecha ===== */
+.encabezado {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  p {
+    color: var(--color-texto-suave);
+    margin-top: 0.5rem;
+  }
+}
+
+.foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* ===== Botones de categoría (mismo estilo redondeado que el header) ===== */
+.categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.pill {
+  background-color: transparent;
+  color: var(--color-texto);
+  border: 2px solid var(--color-texto);
+  border-radius: 30px;
+  padding: 0.4rem 1rem;
+  font-weight: 700;
+
+  &:hover {
+    background-color: var(--color-borde);
+  }
+
+  &.activo {
+    background-color: var(--color-texto);
+    color: var(--color-tarjeta);
+  }
+}
+
+/* ===== Cada categoría ===== */
+.categoria {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+
+  h2 {
+    color: var(--color-principal);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-borde);
+  }
+}
+
+/* ===== Cada producto: info a la izquierda, precio a la derecha ===== */
+.producto {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.nombre {
+  color: var(--color-texto);
+
+  &:hover {
+    color: var(--color-principal);
+  }
+}
+
+.descripcion {
+  color: var(--color-texto-suave);
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+
+/* ===== Íconos al lado del nombre ===== */
+.chincheta {
+  color: var(--color-chincheta);
+}
+
+.happy {
+  color: var(--color-principal);
+}
+
+h3 i {
+  font-size: 1.1rem;
+  margin-left: 0.25rem;
+}
+
+/* ===== Referencias: qué significa cada ícono ===== */
+.referencias {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--color-texto-suave);
+  font-size: 0.9rem;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+}
+
+/* ===== Etiqueta de descuento ===== */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid var(--color-principal);
+  border-radius: 30px;
+  color: var(--color-principal);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ===== Precio ===== */
+.precio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+
+  s {
+    color: var(--color-texto-suave);
+    font-size: 0.9rem;
+  }
+
+  strong {
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+}
+
+/* ===== Celular: la foto arriba del nombre ===== */
+@media (max-width: 600px) {
+  .encabezado {
+    grid-template-columns: 1fr;
+  }
+}

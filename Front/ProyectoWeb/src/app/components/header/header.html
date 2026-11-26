@@ -33,8 +33,11 @@
       </label>
     </div>
 
-    <button class="button type1" [class.activo]="themeService.theme() === 'auto'" (click)="themeService.setTheme('auto')">
-      <span class="btn-txt">Auto</span>
-    </button>
+    <!-- Checkbox de Auto. From Uiverse.io by PriyanshuGupta28 -->
+    <label class="auto">
+      <input type="checkbox" class="input" [checked]="themeService.theme() === 'auto'" (change)="onToggleAuto()">
+      <span class="custom-checkbox"></span>
+      Auto
+    </label>
   </div>
 </header>

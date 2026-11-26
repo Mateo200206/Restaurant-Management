@@ -5,42 +5,55 @@
 }
 
 <form (submit)="onSubmit($event)">
-  <label for="name">Nombre</label>
-  <input id="name" type="text" [formField]="productForm.name">
+  <div class="field">
+    <label for="name">Nombre</label>
+    <input id="name" type="text" [formField]="productForm.name">
+  </div>
 
-  <label for="description">Descripción</label>
-  <textarea id="description" [formField]="productForm.description"></textarea>
+  <div class="field">
+    <label for="description">Descripción</label>
+    <textarea id="description" [formField]="productForm.description"></textarea>
+  </div>
 
-  <label for="price">Precio</label>
-  <input id="price" type="number" step="0.01" [formField]="productForm.price">
+  <div class="field">
+    <label for="price">Precio</label>
+    <input id="price" type="number" step="0.01" [formField]="productForm.price">
+  </div>
 
-  <label for="imageUrl">URL de imagen</label>
-  <input id="imageUrl" type="url" [formField]="productForm.imageUrl">
+  <div class="field">
+    <label for="imageUrl">URL de imagen</label>
+    <input id="imageUrl" type="url" [formField]="productForm.imageUrl">
+  </div>
 
-  <label for="isFeatured">Destacado</label>
-  <input id="isFeatured" type="checkbox" [formField]="productForm.isFeatured">
+  <div class="field">
+    <label for="category">Categoría</label>
+    <select id="category" [formField]="productForm.categoryId">
+      <option value="">Elegí una categoría</option>
+      @for (category of categoriesService.myCategories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
 
-  <label for="category">Categoría</label>
-  <select id="category" [formField]="productForm.categoryId">
-    <option value="">Elegí una categoría</option>
-    @for (category of categoriesService.myCategories(); track category.id) {
-      <option [value]="category.id">{{ category.name }}</option>
-    }
-  </select>
+  <label class="field-check" for="isFeatured">
+    <input id="isFeatured" type="checkbox" [formField]="productForm.isFeatured">
+    Destacado
+  </label>
 
   @if (id()) {
-    <button [disabled]="productForm().invalid()">Guardar Cambios</button>
+    <button [disabled]="productForm().invalid()">Guardar cambios</button>
   } @else {
-    <button [disabled]="productForm().invalid()">Crear Producto</button>
+    <button [disabled]="productForm().invalid()">Crear producto</button>
   }
 </form>
+
 @if (id()) {
-    <form (submit)="onSubmitDiscount($event)">
-      <h2>Descuento</h2>
-      <div class="field">
-        <label for="discount">Porcentaje de descuento</label>
-        <input id="discount" type="number" [formField]="discountForm.discountPercentage">
-      </div>
-      <button [disabled]="discountForm().invalid()">Aplicar descuento</button>
-    </form>
-  }
+  <form class="descuento" (submit)="onSubmitDiscount($event)">
+    <h2>Descuento</h2>
+    <div class="field">
+      <label for="discount">Porcentaje de descuento (0 para sacarlo)</label>
+      <input id="discount" type="number" [formField]="discountForm.discountPercentage">
+    </div>
+    <button [disabled]="discountForm().invalid()">Aplicar descuento</button>
+  </form>
+}

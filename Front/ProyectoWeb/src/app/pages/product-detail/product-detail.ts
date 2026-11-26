@@ -2,6 +2,7 @@ import { Component, input, signal, inject, OnInit } from '@angular/core';
 import { Product } from '../../interfaces/product';
 import { ProductsService } from '../../services/products-service';
 import { Spinner } from '../../components/spinner/spinner';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,6 +15,12 @@ export class ProductDetail implements OnInit {
   product = signal<Product | null>(null);
   productsService = inject(ProductsService);
   loading = signal(true);
+
+  location = inject(Location);
+
+  volver() {
+    this.location.back();
+  }
 
   async ngOnInit(){
     this.product.set(await this.productsService.getProductById(this.id()))

@@ -1,0 +1,93 @@
+/* ===== Botón volver: mismo estilo de pastilla que las categorías ===== */
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  background-color: transparent;
+  color: var(--color-texto);
+  border: 2px solid var(--color-texto);
+  border-radius: 30px;
+  padding: 0.4rem 1rem;
+  font-weight: 700;
+
+  &:hover {
+    background-color: var(--color-borde);
+  }
+}
+
+/* ===== Foto a la izquierda, info a la derecha (como el encabezado de la carta) ===== */
+.detalle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* ===== Íconos al lado del nombre ===== */
+h1 i {
+  font-size: 1.5rem;
+  margin-left: 0.25rem;
+}
+
+.chincheta {
+  color: var(--color-chincheta);
+}
+
+.happy {
+  color: var(--color-principal);
+}
+
+.descripcion {
+  color: var(--color-texto-suave);
+}
+
+/* ===== Etiqueta de descuento ===== */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid var(--color-principal);
+  border-radius: 30px;
+  color: var(--color-principal);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ===== Precio ===== */
+.precio {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+
+  s {
+    color: var(--color-texto-suave);
+  }
+
+  strong {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-principal);
+  }
+}
+
+/* ===== Celular: la foto arriba ===== */
+@media (max-width: 600px) {
+  .detalle {
+    grid-template-columns: 1fr;
+  }
+}

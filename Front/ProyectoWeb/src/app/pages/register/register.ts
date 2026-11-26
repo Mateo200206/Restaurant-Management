@@ -1,8 +1,8 @@
 import { Component, signal, inject } from '@angular/core';
-import { form,email,FormField, required } from '@angular/forms/signals';
+import { form, email, FormField, required, validate } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
-import { RegisterRequest } from '../../interfaces/auth';
+import { RegisterFormModel, RegisterRequest } from '../../interfaces/auth';
 
 @Component({
   selector: 'app-register',
@@ -15,9 +15,10 @@ export class Register {
   registerError = signal(false);
   authService = inject(AuthService);
 
-  registerModel = signal<RegisterRequest>({
+  registerModel = signal<RegisterFormModel>({
     email: "",
     password: "",
+    password2: "",
     name: "",
     description: "",
     imageUrl: "",
@@ -26,13 +27,26 @@ export class Register {
     required(schema.email);
     email(schema.email);
     required(schema.password);
-    required(schema.name)
+    required(schema.name);
+    // La contraseña repetida tiene que ser igual a la primera
+    validate(schema.password2, ({ value }) => {
+      if (value() === this.registerModel().password) return null;
+      return { kind: "passwordMatch", message: "Las contraseñas no coinciden" };
+    });
   });
 
   async onRegister(event: Event) {
     this.registerError.set(false)
     event.preventDefault();
-    const resultForm = await this.authService.register(this.registerModel());
+    // Armo lo que se manda al back, sin la contraseña repetida
+    const data: RegisterRequest = {
+      email: this.registerModel().email,
+      password: this.registerModel().password,
+      name: this.registerModel().name,
+      description: this.registerModel().description,
+      imageUrl: this.registerModel().imageUrl
+    };
+    const resultForm = await this.authService.register(data);
     if (resultForm) {
       this.router.navigate(["/login"]);
     }else{

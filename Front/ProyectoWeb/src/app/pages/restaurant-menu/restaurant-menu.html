@@ -1,41 +1,72 @@
 @if (loading()) {
-    <app-spinner />
+  <app-spinner />
 } @else {
-    <h1>{{ restaurant()?.name }}</h1>
-    <p>{{ restaurant()?.description }}</p>
-
-    <nav>
-      <button (click)="selectedCategoryId.set(null)">Todas</button>
-      @for (category of categoriesService.categories(); track category.id) {
-        <button (click)="selectedCategoryId.set(category.id)">{{ category.name }}</button>
-      }
-    </nav>
-
-    @for (category of categoriesService.categories(); track category.id) {
-        @if (selectedCategoryId() === category.id || selectedCategoryId() === null) {
-            <section>
-                <h2>{{ category.name }}</h2>
-                @for (product of productsService.products(); track product.id) {
-                    @if (product.categoryId === category.id) {
-                        <article>
-                            <a [routerLink]="['/product', product.id]">
-                                <h3>{{ product.name }}</h3>
-                            </a>
-                            @if (product.isFeatured) {
-                                <span>⭐ Destacado</span>
-                            }
-                            @if (product.hasHappyHour) {
-                                <span>🍻 Happy Hour</span>
-                            }
-                            @if (product.discountPercentage === 0) {
-                                <p>${{ product.finalPrice }}</p>
-                            } @else {
-                                <p>-{{product.discountPercentage}}%  <s>${{ product.price }}</s>  ${{product.finalPrice}}</p>
-                            }
-                        </article>
-                    }
-                }
-            </section>
-        }
+  <div class="encabezado">
+    @if (restaurant()?.imageUrl) {
+      <img class="foto" [src]="restaurant()?.imageUrl" [alt]="restaurant()?.name">
     }
+    <div>
+      <h1>{{ restaurant()?.name }}</h1>
+      <p>{{ restaurant()?.description }}</p>
+    </div>
+  </div>
+
+  <p class="referencias">
+    <span><i class="ph-bold ph-push-pin chincheta" aria-hidden="true"></i> Destacado</span>
+    <span><i class="ph-bold ph-martini happy" aria-hidden="true"></i> Happy hour</span>
+  </p>
+
+  <nav class="categorias" aria-label="Filtrar por categoría">
+    <button class="pill" [class.activo]="selectedCategoryId() === null" (click)="selectedCategoryId.set(null)">
+      Todas
+    </button>
+    @for (category of categoriesService.categories(); track category.id) {
+      <button class="pill" [class.activo]="selectedCategoryId() === category.id" (click)="selectedCategoryId.set(category.id)">
+        {{ category.name }}
+      </button>
+    }
+  </nav>
+
+  @for (category of categoriesService.categories(); track category.id) {
+    @if (selectedCategoryId() === category.id || selectedCategoryId() === null) {
+      <section class="categoria">
+        <h2>{{ category.name }}</h2>
+
+        @for (product of productsService.products(); track product.id) {
+          @if (product.categoryId === category.id) {
+            <article class="producto">
+              <div class="info">
+                <a class="nombre" [routerLink]="['/product', product.id]">
+                  <h3>
+                    {{ product.name }}
+                    @if (product.isFeatured) {
+                      <i class="ph-bold ph-push-pin chincheta" role="img" aria-label="Destacado"></i>
+                    }
+                    @if (product.hasHappyHour) {
+                      <i class="ph-bold ph-martini happy" role="img" aria-label="Happy hour"></i>
+                    }
+                  </h3>
+                </a>
+                @if (product.description) {
+                  <p class="descripcion">{{ product.description }}</p>
+                }
+                @if (product.discountPercentage > 0) {
+                  <span class="etiqueta">
+                    <i class="ph-bold ph-tag" aria-hidden="true"></i> -{{ product.discountPercentage }}%
+                  </span>
+                }
+              </div>
+
+              <div class="precio">
+                @if (product.discountPercentage > 0) {
+                  <s>${{ product.price }}</s>
+                }
+                <strong>${{ product.finalPrice }}</strong>
+              </div>
+            </article>
+          }
+        }
+      </section>
+    }
+  }
 }

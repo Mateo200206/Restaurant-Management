@@ -1,8 +1,44 @@
+<button class="volver" (click)="volver()">
+  <i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Volver
+</button>
+
 @if (loading()) {
   <app-spinner />
+} @else if (product()) {
+  <div class="detalle">
+    @if (product()?.imageUrl) {
+      <img class="foto" [src]="product()?.imageUrl" [alt]="product()?.name">
+    }
+
+    <div class="info">
+      <h1>
+        {{ product()?.name }}
+        @if (product()?.isFeatured) {
+          <i class="ph-bold ph-push-pin chincheta" role="img" aria-label="Destacado"></i>
+        }
+        @if (product()?.hasHappyHour) {
+          <i class="ph-bold ph-martini happy" role="img" aria-label="Happy hour"></i>
+        }
+      </h1>
+
+      @if (product()?.description) {
+        <p class="descripcion">{{ product()?.description }}</p>
+      }
+
+      @if (product()!.discountPercentage > 0) {
+        <span class="etiqueta">
+          <i class="ph-bold ph-tag" aria-hidden="true"></i> -{{ product()?.discountPercentage }}%
+        </span>
+      }
+
+      <div class="precio">
+        @if (product()!.discountPercentage > 0) {
+          <s>${{ product()?.price }}</s>
+        }
+        <strong>${{ product()?.finalPrice }}</strong>
+      </div>
+    </div>
+  </div>
 } @else {
-  <img [src]="product()?.imageUrl" [alt]="product()?.name">
-  <h1>{{product()?.name}}</h1>
-  <p>{{product()?.description}}</p>
-  <p>{{product()?.finalPrice}}</p>
+  <p>No encontramos este producto.</p>
 }

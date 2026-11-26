@@ -95,6 +95,10 @@ namespace FinalWeb.Services.Implementations
             restaurant.ImageUrl = dto.ImageUrl;
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {
+                if (_passwordHasher.VerifyHashedPassword(restaurant, restaurant.Password, dto.CurrentPassword ?? "") == PasswordVerificationResult.Failed)
+                {
+                    throw new Exception("La contraseña actual es incorrecta");
+                }
                 restaurant.Password = _passwordHasher.HashPassword(restaurant, dto.Password);
             }
 

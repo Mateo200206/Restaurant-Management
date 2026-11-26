@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "src/app/pages/home/home.html"
+        ],
+        "createdAt": "2026-11-26T03:18:43.276Z",
+        "reason": "Claude: falso positivo, el src es un binding de Angular ([src]) con la foto que viene del back, protegido con @if"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "src/app/pages/restaurant-menu/restaurant-menu.html"
+        ],
+        "createdAt": "2026-11-26T03:18:43.510Z",
+        "reason": "Claude: falso positivo, el src es un binding de Angular ([src]) con la foto que viene del back, protegido con @if"
+      }
+    ]
+  }
+}

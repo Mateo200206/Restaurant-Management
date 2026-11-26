@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, input } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ProductsService } from '../../services/products-service';
 import { RouterLink } from '@angular/router';
 import { CategoriesService } from '../../services/categories-service';
@@ -19,10 +19,30 @@ export class Admin implements OnInit {
   editingCategoryId = signal<number | null>(null);
   loading = signal(true);
 
+  /** Categoría elegida para filtrar los productos (null = todas) */
+  filterCategoryId = signal<number | null>(null);
+
+  /** Los productos que se muestran: todos, o solo los de la categoría elegida.
+      Es computed: se recalcula solo cuando cambia el filtro o la lista de productos */
+  filteredProducts = computed(() => {
+    const id = this.filterCategoryId();
+    if (id === null) return this.productsService.myProducts();
+    return this.productsService.myProducts().filter(p => p.categoryId === id);
+  });
+
+  /** Devuelve el nombre de una categoría a partir de su id */
+  categoryName(id: number) {
+    const category = this.categoriesService.myCategories().find(c => c.id === id);
+    return category?.name ?? "";
+  }
+
   async ngOnInit(){
-    await this.productsService.getMyProducts();
-    await this.categoriesService.getMyCategories();
-    this.loading.set(false);
+    try {
+      await this.productsService.getMyProducts();
+      await this.categoriesService.getMyCategories();
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   async onDeleteProduct(id: number) {
@@ -78,7 +98,12 @@ export class Admin implements OnInit {
     if (!result.isConfirmed) return;
 
     const ok = await this.categoriesService.deleteCategory(id);
-    if (!ok) Swal.fire("Error", "No se pudo eliminar la categoría", "error");
+    if (!ok) {
+      Swal.fire("Error", "No se pudo eliminar la categoría", "error");
+      return;
+    }
+    // Si estaba filtrando por la categoría borrada, vuelvo a "Todas"
+    if (this.filterCategoryId() === id) this.filterCategoryId.set(null);
   }
 
   onEditCategory(category: Category) {

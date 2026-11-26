@@ -23,7 +23,10 @@ export class ProductDetail implements OnInit {
   }
 
   async ngOnInit(){
-    this.product.set(await this.productsService.getProductById(this.id()))
-    this.loading.set(false);
+    try {
+      this.product.set(await this.productsService.getProductById(this.id()))
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

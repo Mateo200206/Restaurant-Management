@@ -1,59 +1,61 @@
-@if (id()) {
-  <h1>Editar producto</h1>
-} @else {
-  <h1>Nuevo producto</h1>
-}
+<!-- Formulario. From Uiverse.io by Yaya12085 -->
+<form class="form" (submit)="onSubmit($event)">
+  @if (id()) {
+    <h1 class="title">Editar producto</h1>
+  } @else {
+    <h1 class="title">Nuevo producto</h1>
+  }
 
-<form (submit)="onSubmit($event)">
-  <div class="field">
-    <label for="name">Nombre</label>
-    <input id="name" type="text" [formField]="productForm.name">
-  </div>
+  <label>
+    <input class="input" type="text" placeholder=" " [formField]="productForm.name">
+    <span>Nombre</span>
+  </label>
 
-  <div class="field">
-    <label for="description">Descripción</label>
-    <textarea id="description" [formField]="productForm.description"></textarea>
-  </div>
+  <label>
+    <textarea class="input" placeholder=" " [formField]="productForm.description"></textarea>
+    <span>Descripción (opcional)</span>
+  </label>
 
-  <div class="field">
-    <label for="price">Precio</label>
-    <input id="price" type="number" step="0.01" [formField]="productForm.price">
-  </div>
+  <label>
+    <input class="input" type="number" step="0.01" placeholder=" " [formField]="productForm.price">
+    <span>Precio</span>
+  </label>
 
-  <div class="field">
-    <label for="imageUrl">URL de imagen</label>
-    <input id="imageUrl" type="url" [formField]="productForm.imageUrl">
-  </div>
+  <label>
+    <input class="input" type="url" placeholder=" " [formField]="productForm.imageUrl">
+    <span>URL de imagen (opcional)</span>
+  </label>
 
-  <div class="field">
-    <label for="category">Categoría</label>
-    <select id="category" [formField]="productForm.categoryId">
+  <label class="estatico">
+    Categoría
+    <select [formField]="productForm.categoryId">
       <option value="">Elegí una categoría</option>
       @for (category of categoriesService.myCategories(); track category.id) {
         <option [value]="category.id">{{ category.name }}</option>
       }
     </select>
-  </div>
+  </label>
 
-  <label class="field-check" for="isFeatured">
-    <input id="isFeatured" type="checkbox" [formField]="productForm.isFeatured">
+  <label class="field-check">
+    <input type="checkbox" [formField]="productForm.isFeatured">
     Destacado
   </label>
 
-  @if (id()) {
-    <button [disabled]="productForm().invalid()">Guardar cambios</button>
-  } @else {
-    <button [disabled]="productForm().invalid()">Crear producto</button>
-  }
+  <button class="submit" [disabled]="productForm().invalid()">
+    @if (id()) { Guardar cambios } @else { Crear producto }
+  </button>
 </form>
 
 @if (id()) {
-  <form class="descuento" (submit)="onSubmitDiscount($event)">
-    <h2>Descuento</h2>
-    <div class="field">
-      <label for="discount">Porcentaje de descuento (0 para sacarlo)</label>
-      <input id="discount" type="number" [formField]="discountForm.discountPercentage">
-    </div>
-    <button [disabled]="discountForm().invalid()">Aplicar descuento</button>
+  <form class="form" (submit)="onSubmitDiscount($event)">
+    <h2 class="title">Descuento</h2>
+    <p class="message">Poné 0 para sacarlo.</p>
+
+    <label>
+      <input class="input" type="number" placeholder=" " [formField]="discountForm.discountPercentage">
+      <span>Porcentaje de descuento</span>
+    </label>
+
+    <button class="submit" [disabled]="discountForm().invalid()">Aplicar descuento</button>
   </form>
 }

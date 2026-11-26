@@ -1,30 +1,40 @@
-<h1>Mi cuenta</h1>
+<!-- Formulario. From Uiverse.io by Yaya12085 -->
+<form class="form" (submit)="onSubmit($event)">
+  <h1 class="title">Mi cuenta</h1>
 
-<form (submit)="onSubmit($event)">
-  <div class="field">
-    <label for="name">Nombre del restaurante</label>
-    <input id="name" type="text" [formField]="accountForm.name">
-  </div>
+  <label>
+    <input class="input" type="text" placeholder=" " [formField]="accountForm.name">
+    <span>Nombre del restaurante</span>
+  </label>
 
-  <div class="field">
-    <label for="description">Descripción</label>
-    <textarea id="description" [formField]="accountForm.description"></textarea>
-  </div>
+  <label>
+    <textarea class="input" placeholder=" " [formField]="accountForm.description"></textarea>
+    <span>Descripción</span>
+  </label>
 
-  <div class="field">
-    <label for="imageUrl">URL de imagen</label>
-    <input id="imageUrl" type="url" [formField]="accountForm.imageUrl">
-  </div>
+  <label>
+    <input class="input" type="url" placeholder=" " [formField]="accountForm.imageUrl">
+    <span>URL de imagen</span>
+  </label>
 
-  <div class="field">
-    <label for="password">Nueva contraseña (dejala vacía para no cambiarla)</label>
-    <input id="password" type="password" [formField]="accountForm.password">
-  </div>
+  <label>
+    <input class="input" type="password" placeholder=" " [formField]="accountForm.password">
+    <span>Nueva contraseña</span>
+  </label>
+  <p class="message">Dejala vacía si no la querés cambiar.</p>
 
-  <button [disabled]="accountForm().invalid()">Guardar cambios</button>
+  @if (accountModel().password !== "") {
+    <label>
+      <input class="input" type="password" placeholder=" " [formField]="accountForm.currentPassword">
+      <span>Contraseña actual</span>
+    </label>
+  }
+
+  <button class="submit" [disabled]="accountForm().invalid()">Guardar cambios</button>
 </form>
 
-<section>
-  <h2>Zona peligrosa</h2>
-  <button type="button" (click)="onDeleteAccount()">Borrar mi cuenta</button>
+<section class="form">
+  <h2 class="title">Borrar cuenta</h2>
+  <p class="message">Se borran también todas tus categorías y productos. No se puede deshacer.</p>
+  <button class="submit peligro" type="button" (click)="onDeleteAccount()">Borrar mi cuenta</button>
 </section>

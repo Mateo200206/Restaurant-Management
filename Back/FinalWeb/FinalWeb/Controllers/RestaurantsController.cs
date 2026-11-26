@@ -52,7 +52,15 @@ namespace FinalWeb.Controllers
         {
             int restaurantId = Int32.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type.Contains("nameidentifier"))!.Value);
 
-            bool updated = _restaurantService.UpdateRestaurant(dto, restaurantId);
+            bool updated;
+            try
+            {
+                updated = _restaurantService.UpdateRestaurant(dto, restaurantId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             if (!updated)
             {
                 return NotFound();

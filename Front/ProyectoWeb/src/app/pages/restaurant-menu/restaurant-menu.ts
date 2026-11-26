@@ -22,9 +22,12 @@ export class RestaurantMenu implements OnInit{
   loading = signal(true);
 
   async ngOnInit(){
-    this.restaurant.set(await this.restaurantsService.getRestaurantById(this.id()))
-    await this.productsService.getProductsByRestaurant(this.id())
-    await this.categoriesService.getCategoriesByRestaurant(this.id())
-    this.loading.set(false);
+    try {
+      this.restaurant.set(await this.restaurantsService.getRestaurantById(this.id()))
+      await this.productsService.getProductsByRestaurant(this.id())
+      await this.categoriesService.getCategoriesByRestaurant(this.id())
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

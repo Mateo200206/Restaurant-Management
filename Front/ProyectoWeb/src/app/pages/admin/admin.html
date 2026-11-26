@@ -1,47 +1,119 @@
-<h1>Mi panel</h1>
-<a routerLink="/admin/account">Mi cuenta</a>
+<div class="encabezado">
+  <h1>Mi panel</h1>
+  <div class="acciones">
+    <a class="pill" routerLink="/admin/account">
+      <i class="ph-bold ph-user" aria-hidden="true"></i> Mi cuenta
+    </a>
+    <button class="pill" (click)="onExportMenu()">
+      <i class="ph-bold ph-download-simple" aria-hidden="true"></i> Exportar CSV
+    </button>
+    <a class="pill llena" routerLink="/admin/products/new">
+      <i class="ph-bold ph-plus" aria-hidden="true"></i> Nuevo producto
+    </a>
+  </div>
+</div>
 
 @if (loading()) {
   <app-spinner />
 } @else {
-<section>
-  <h2>Mis categorías</h2>
+  <section class="bloque">
+    <h2>Mis categorías</h2>
 
-  <form (submit)="onSubmitCategory($event)">
-    <label for="categoryName">Nombre de la categoría</label>
-    <input id="categoryName" type="text" [formField]="categoryForm.name">
+    <form class="nueva-categoria" (submit)="onSubmitCategory($event)">
+      <input
+        class="input"
+        type="text"
+        aria-label="Nombre de la categoría"
+        placeholder="Nombre de la categoría"
+        [formField]="categoryForm.name">
 
-    @if (editingCategoryId()) {
-      <button [disabled]="categoryForm().invalid()">Guardar</button>
-      <button type="button" (click)="onCancelEdit()">Cancelar</button>
-    } @else {
-      <button [disabled]="categoryForm().invalid()">Agregar</button>
+      @if (editingCategoryId()) {
+        <button [disabled]="categoryForm().invalid()">Guardar</button>
+        <button class="pill" type="button" (click)="onCancelEdit()">Cancelar</button>
+      } @else {
+        <button [disabled]="categoryForm().invalid()">
+          <i class="ph-bold ph-plus" aria-hidden="true"></i> Agregar
+        </button>
+      }
+    </form>
+
+    <div class="chips">
+      @for (category of categoriesService.myCategories(); track category.id) {
+        <div class="chip" [class.editando]="editingCategoryId() === category.id">
+          <span>{{ category.name }}</span>
+          <button class="icono" (click)="onEditCategory(category)" [attr.aria-label]="'Editar ' + category.name">
+            <i class="ph-bold ph-pencil-simple" aria-hidden="true"></i>
+          </button>
+          <button class="icono" (click)="onDeleteCategory(category.id)" [attr.aria-label]="'Eliminar ' + category.name">
+            <i class="ph-bold ph-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      } @empty {
+        <p class="vacio">Todavía no tenés categorías. Creá una para poder cargar productos.</p>
+      }
+    </div>
+  </section>
+
+  <section class="bloque">
+    <h2>Mis productos</h2>
+
+    @if (categoriesService.myCategories().length > 0) {
+      <nav class="filtro" aria-label="Filtrar productos por categoría">
+        <button class="pill" [class.activo]="filterCategoryId() === null" (click)="filterCategoryId.set(null)">
+          Todas
+        </button>
+        @for (category of categoriesService.myCategories(); track category.id) {
+          <button class="pill" [class.activo]="filterCategoryId() === category.id" (click)="filterCategoryId.set(category.id)">
+            {{ category.name }}
+          </button>
+        }
+      </nav>
     }
-  </form>
 
-  @for (category of categoriesService.myCategories(); track category.id) {
-    <article>
-      <h3>{{ category.name }}</h3>
-      <button (click)="onEditCategory(category)">Editar</button>
-      <button (click)="onDeleteCategory(category.id)">Eliminar</button>
-    </article>
-  }
-</section>
+    @for (product of filteredProducts(); track product.id) {
+      <article class="producto">
+        <div class="info">
+          <span class="categoria">{{ categoryName(product.categoryId) }}</span>
+          <h3>
+            {{ product.name }}
+            @if (product.isFeatured) {
+              <i class="ph-bold ph-push-pin chincheta" role="img" aria-label="Destacado"></i>
+            }
+            @if (product.hasHappyHour) {
+              <i class="ph-bold ph-martini happy" role="img" aria-label="Happy hour"></i>
+            }
+          </h3>
+          <p class="precio">
+            @if (product.discountPercentage > 0) {
+              <s>${{ product.price }}</s>
+            }
+            <strong>${{ product.finalPrice }}</strong>
+          </p>
+        </div>
 
-<section>
-  <h2>Mis productos</h2>
-  <a routerLink="/admin/products/new" aria-label="Nuevo producto">+</a> <button (click)="onExportMenu()">Exportar menú (CSV)</button>
-
-  @for (product of productsService.myProducts(); track product.id) {
-    <article>
-      <h3>{{ product.name }}</h3>
-      <p>${{ product.finalPrice }}</p>
-      <a [routerLink]="['/admin/products', product.id, 'edit']">Editar</a>
-      <button (click)="onToggleHappyHour(product.id, !product.hasHappyHour)">
-        @if (product.hasHappyHour) { Quitar happy hour } @else { Activar happy hour }
-      </button>
-      <button (click)="onDeleteProduct(product.id)">Eliminar</button>
-    </article>
-  }
-</section>
+        <div class="botones">
+          <button
+            class="icono"
+            [class.activo]="product.hasHappyHour"
+            (click)="onToggleHappyHour(product.id, !product.hasHappyHour)"
+            [attr.aria-label]="product.hasHappyHour ? 'Quitar happy hour' : 'Activar happy hour'"
+            [attr.title]="product.hasHappyHour ? 'Quitar happy hour' : 'Activar happy hour'">
+            <i class="ph-bold ph-martini" aria-hidden="true"></i>
+          </button>
+          <a class="icono" [routerLink]="['/admin/products', product.id, 'edit']" aria-label="Editar producto" title="Editar">
+            <i class="ph-bold ph-pencil-simple" aria-hidden="true"></i>
+          </a>
+          <button class="icono" (click)="onDeleteProduct(product.id)" aria-label="Eliminar producto" title="Eliminar">
+            <i class="ph-bold ph-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </article>
+    } @empty {
+      @if (filterCategoryId() === null) {
+        <p class="vacio">Todavía no cargaste productos. Tocá "Nuevo producto" para empezar.</p>
+      } @else {
+        <p class="vacio">No hay productos en esta categoría.</p>
+      }
+    }
+  </section>
 }

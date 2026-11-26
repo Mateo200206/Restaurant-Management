@@ -52,7 +52,8 @@ export class AuthService {
       headers: { "content-type": "application/json", Authorization: "Bearer " + this.token()},
       body: JSON.stringify(data)
       });
-      return response.ok;
+      // Devuelvo el código (204 = ok, 400 = contraseña actual incorrecta) para mostrar el mensaje justo
+      return response.status;
     }
 
     getRestaurantId(): number | null {

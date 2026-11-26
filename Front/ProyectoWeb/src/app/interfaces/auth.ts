@@ -16,6 +16,7 @@ export interface UpdateAccountRequest {
   description: string;
   imageUrl: string;
   password: string;
+  currentPassword: string;
 }
 
 /** Lo que tiene el formulario de registro: igual al RegisterRequest, más la contraseña repetida (que no se manda al back) */

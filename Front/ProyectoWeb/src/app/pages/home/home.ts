@@ -16,7 +16,11 @@ export class Home implements OnInit{
   loading = signal(true);
 
   async ngOnInit() {
-    await this.restaurantsService.getRestaurants();
-    this.loading.set(false);
+    try {
+      await this.restaurantsService.getRestaurants();
+    } finally {
+      // finally se ejecuta siempre: así el spinner se apaga aunque el back no responda
+      this.loading.set(false);
+    }
   }
 }
